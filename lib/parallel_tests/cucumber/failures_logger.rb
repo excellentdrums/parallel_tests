@@ -8,6 +8,8 @@ module ParallelTests
 
       def initialize(runtime, path_or_io, options)
         @io = prepare_io(path_or_io)
+        @failures = {}
+        @lines = []
       end
 
       def after_feature(feature)
@@ -18,6 +20,11 @@ module ParallelTests
             end
           end
         end
+      end
+
+      def done
+        return if @failures.empty?
+        @io.print file_failures.join(' ') + ' '
       end
 
     end

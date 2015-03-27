@@ -8,13 +8,14 @@ module ParallelTests
 
       def initialize(runtime, path_or_io, options)
         @io = prepare_io(path_or_io)
+        @failures = {}
       end
 
       def after_feature(feature)
-        unless @lines.empty?
+        unless @failures.empty?
           lock_output do
-            @lines.each do |line|
-              @io.puts "#{feature.file}:#{line}"
+            @failures.each do |failure|
+              @io.puts "#{feature.file}:#{failure}"
             end
           end
         end
